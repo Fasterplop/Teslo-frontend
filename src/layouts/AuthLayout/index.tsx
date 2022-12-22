@@ -147,7 +147,7 @@ const AuthLayout: React.FunctionComponent<IAuthLayoutProps> = props => {
 						</button>
 					</Tooltip>
 				</div> */}
-
+				{/* 
 				<div>
 					<h6 className="mb-6 text-center">DEFAULT INPUT</h6>
 					<div className="form-group">
@@ -303,7 +303,7 @@ const AuthLayout: React.FunctionComponent<IAuthLayoutProps> = props => {
 
 				<div className="form-group">
 					<Switch isChecked={enabled} onChange={setEnabled} />
-				</div>
+				</div> */}
 
 				<SignInForm />
 			</AuthSide>
