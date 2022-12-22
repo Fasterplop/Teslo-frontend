@@ -1,9 +1,10 @@
-import * as React from "react";
+import * as React from 'react';
 
 interface IDashboardLayoutProps {}
 
-const DashboardLayout: React.FC<IDashboardLayoutProps> = (props) => {
-  return null;
+const DashboardLayout: React.FC<IDashboardLayoutProps> = props => {
+	const {} = props;
+	return null;
 };
 
 export default DashboardLayout;
