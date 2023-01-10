@@ -1,9 +1,10 @@
+import { ReturnValuesLogin } from "@/services/auth-service/interfaces";
 import { GET_USER, LOGIN_ERROR, LOGOUT_USER } from "../types";
 import { AuthContextValues } from "./AuthContext";
 
 interface ActionAuthReducer {
   type: string;
-  payload?: any;
+  payload?: ReturnValuesLogin;
 }
 
 const authReducer = (
@@ -12,14 +13,13 @@ const authReducer = (
 ): AuthContextValues => {
   switch (action.type) {
     case GET_USER:
-      const user = { ...action.payload };
-      delete user.token;
+      const { user, token: accessToken } = action.payload;
       return {
         ...state,
         user,
         authenticated: true,
         loading: false,
-        accessToken: action.payload.token,
+        accessToken,
       };
 
     case LOGIN_ERROR:

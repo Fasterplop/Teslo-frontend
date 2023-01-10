@@ -1,8 +1,14 @@
 import { axiosClient } from "@/config/axios";
-import { LoginUserDto, ReturnValuesLogin } from "./interfaces";
+import { LoginUserDto, ReturnValuesLogin, SignUpUserDto } from "./interfaces";
 
 export const authService = {
-  LogIn(body: LoginUserDto) {
-    return axiosClient.post<ReturnValuesLogin>("/auth/local/signin", body);
+  logIn(body: LoginUserDto) {
+    return axiosClient.post<ReturnValuesLogin>("/auth/local/login", body);
+  },
+  refresh() {
+    return axiosClient.get<ReturnValuesLogin>("/auth/refresh");
+  },
+  signUp(body: SignUpUserDto) {
+    return axiosClient.post<ReturnValuesLogin>("/auth/local/signup", body);
   },
 };

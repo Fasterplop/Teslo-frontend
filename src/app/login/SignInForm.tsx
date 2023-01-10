@@ -1,97 +1,113 @@
-import useTimeOutMessage from '@/utils/hooks/useTimeOutMessage';
-import * as React from 'react';
-import * as Yup from 'yup';
-import { Form, Formik } from 'formik';
-import { InputFormik } from '@/components/@forms';
-import { LoginUserDto } from '@/services/auth-service/interfaces';
-import { authService } from '@/services/auth-service';
-import { useAuthContext } from '@/context/AuthProvider';
-import { useModal } from '@/context/ModalProvider';
-import ButtonFormik from '@/components/@forms/ButtonFormik';
+import useTimeOutMessage from "@/utils/hooks/useTimeOutMessage";
+import * as React from "react";
+import * as Yup from "yup";
+import { Form, Formik } from "formik";
+import { InputFormik } from "@/components/@forms";
+import { LoginUserDto } from "@/services/auth-service/interfaces";
+import { authService } from "@/services/auth-service";
+import { useAuthContext } from "@/context/AuthProvider";
+import { useModal } from "@/context/ModalProvider";
+import ButtonFormik from "@/components/@forms/ButtonFormik";
+import { useNavigate } from "react-router-dom";
+import RenderIf from "@/components/ui/RenderIf";
+import Alert from "@/components/ui/Alert";
 
-const ForgottenPasswordForm = React.lazy(() => import('./ForgottenPasswordForm'));
+const ForgottenPasswordForm = React.lazy(
+  () => import("./ForgottenPasswordForm")
+);
 
 const validationSchema = Yup.object().shape({
-	username: Yup.string().required('Please enter your user name'),
-	password: Yup.string().required('Please enter your password'),
+  username: Yup.string().required("Please enter your user name"),
+  password: Yup.string().required("Please enter your password"),
 });
 
 const INITIAL_VALUES: LoginUserDto = {
-	username: '',
-	password: '',
+  username: "",
+  password: "",
 };
 
 interface ISignInFormProps {}
 
-const SignInForm: React.FunctionComponent<ISignInFormProps> = props => {
-	const {} = props;
-	const { initAuthenticate } = useAuthContext();
-	const [message, setMessage] = useTimeOutMessage();
-	const { setModal } = useModal();
+const SignInForm: React.FunctionComponent<ISignInFormProps> = (props) => {
+  const {} = props;
+  const navigate = useNavigate();
+  const { initAuthenticate } = useAuthContext();
+  const [message, setMessage] = useTimeOutMessage();
+  const { setModal } = useModal();
 
-	const onSubmit = async (values: LoginUserDto) => {
-		try {
-			const req = await authService.LogIn(values);
-			initAuthenticate(req.data);
-			console.log(req.data);
-		} catch (error) {
-			console.log(error);
-		}
-	};
+  const onSubmit = async (values: LoginUserDto) => {
+    try {
+      const req = await authService.logIn(values);
+      initAuthenticate(req.data);
+      navigate("/dashboard");
+    } catch (error) {
+      console.log(error);
+      setMessage(error.response.data.message);
+    }
+  };
 
-	const openForgottenPasswordModal = () => {
-		setModal({
-			title: 'Forgot Password',
-			children: (
-				<React.Suspense fallback={<></>}>
-					<ForgottenPasswordForm />
-				</React.Suspense>
-			),
-		});
-	};
+  const openForgottenPasswordModal = () => {
+    setModal({
+      title: "Forgot Password",
+      children: (
+        <React.Suspense fallback={<></>}>
+          <ForgottenPasswordForm />
+        </React.Suspense>
+      ),
+    });
+  };
 
-	return (
-		<Formik
-			initialValues={INITIAL_VALUES}
-			validationSchema={validationSchema}
-			onSubmit={onSubmit}
-		>
-			<Form>
-				<InputFormik
-					name="username"
-					label="Username"
-					placeholder="Type your username"
-					showSuccess={false}
-				/>
+  return (
+    <Formik
+      initialValues={INITIAL_VALUES}
+      validationSchema={validationSchema}
+      onSubmit={onSubmit}
+    >
+      <Form>
+        <RenderIf isTrue={message}>
+          <Alert
+            type="danger"
+            className="mb-4"
+            title="Escribe bien tu vaina mamaguevo"
+          >
+            {message}
+          </Alert>
+        </RenderIf>
+        <InputFormik
+          name="username"
+          label="Username"
+          placeholder="Type your username"
+          showSuccess={false}
+        />
 
-				<InputFormik
-					name="password"
-					type="password"
-					label="Password"
-					placeholder="Type your password"
-					autoComplete="off"
-					showSuccess={false}
-				/>
+        <InputFormik
+          name="password"
+          type="password"
+          label="Password"
+          placeholder="Type your password"
+          autoComplete="off"
+          showSuccess={false}
+        />
 
-				<div className="form-group">
-					<ButtonFormik className="btn-primary" full>
-						Sign In
-					</ButtonFormik>
-				</div>
+        <div className="form-group">
+          <ButtonFormik className="btn-primary" full>
+            Sign In
+          </ButtonFormik>
+        </div>
 
-				<p className="text-center">
-					Have you forgotten your{' '}
-					<button
-						type="button"
-						onClick={openForgottenPasswordModal}
-						className="text-blue-500 hover:text-blue-700 transition font-bold"
-					>
-						password?
-					</button>
-				</p>
-			</Form>
-		</Formik>
-	);
+        <p className="text-center">
+          Have you forgotten your{" "}
+          <button
+            type="button"
+            onClick={openForgottenPasswordModal}
+            className="text-blue-500 hover:text-blue-700 transition font-bold"
+          >
+            password?
+          </button>
+        </p>
+      </Form>
+    </Formik>
+  );
 };
 
 export default SignInForm;

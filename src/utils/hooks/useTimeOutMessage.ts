@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
 
-function useTimeOutMessage(interval = 3000) {
+function useTimeOutMessage(
+  interval = 5000
+): [message: string, setMessage: (message: string) => void] {
   const [message, setMessage] = useState("");
 
   useEffect(() => {
