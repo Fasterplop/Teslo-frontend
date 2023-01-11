@@ -1,9 +1,8 @@
 import { InputFormik } from '@/components/@forms';
 import ButtonFormik from '@/components/@forms/ButtonFormik';
-import { useModal } from '@/context/ModalProvider';
+import { useModalStore } from '@/store';
 import { Form, Formik } from 'formik';
 import * as React from 'react';
-import { FaVoicemail } from 'react-icons/fa';
 import * as Yup from 'yup';
 
 interface IForgottenPasswordFormProps {}
@@ -18,7 +17,7 @@ const validationSchema = Yup.object({
 
 const ForgottenPasswordForm: React.FunctionComponent<IForgottenPasswordFormProps> = props => {
 	const {} = props;
-	const { closeModal } = useModal();
+	const { closeModal } = useModalStore();
 
 	const onSubmit = (values: typeof INITIAL_VALUES) => {
 		try {

@@ -4,7 +4,7 @@ import classNames from 'classnames';
 import 'react-tooltip/dist/react-tooltip.css';
 
 interface Props {
-	children: React.ReactNode;
+	children?: React.ReactNode;
 	message?: string;
 	placement?: PlacesType;
 	className?: string;

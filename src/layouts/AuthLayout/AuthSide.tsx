@@ -47,7 +47,7 @@ const AuthSide: React.FunctionComponent<IAuthSideProps> = props => {
 				</span>
 			</div>
 			<div className="col-span-2 flex flex-col justify-center items-center bg-white dark:bg-gray-800">
-				<div className="xl:min-w-[600px] px-4">
+				<div className="xl:min-w-[500px] px-4">
 					<div className="mb-8">{content}</div>
 					{children}
 				</div>

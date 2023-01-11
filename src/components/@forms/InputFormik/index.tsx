@@ -1,4 +1,4 @@
-import { useFormikContext, getIn, Field } from 'formik';
+import { useFormikContext, getIn, Field, ErrorMessage } from 'formik';
 import * as React from 'react';
 import classNames from 'classnames';
 import Label from '../label';
@@ -17,6 +17,7 @@ interface IInputFormikProps {
 	required?: boolean;
 	showSuccess?: boolean;
 	showError?: boolean;
+	forceErrorMessage?: string;
 }
 
 const InputFormik: React.FunctionComponent<IInputFormikProps> = props => {
@@ -33,12 +34,13 @@ const InputFormik: React.FunctionComponent<IInputFormikProps> = props => {
 		required,
 		showError,
 		showSuccess,
+		forceErrorMessage,
 	} = props;
 	const { errors, touched } = useFormikContext();
 	const error = getIn(errors, name);
 	const isTouched = getIn(touched, name);
-	const validateError = error && isTouched && showError;
-	const validateSuccess = !error && !isTouched && showSuccess;
+	const validateError = (error && isTouched && showError) || Boolean(forceErrorMessage);
+	const validateSuccess = !error && isTouched && showSuccess && !validateError;
 
 	return (
 		<div
@@ -64,7 +66,7 @@ const InputFormik: React.FunctionComponent<IInputFormikProps> = props => {
 			/>
 
 			<RenderIf isTrue={validateError}>
-				<p>{error}</p>
+				<p>{error || forceErrorMessage}</p>
 			</RenderIf>
 		</div>
 	);

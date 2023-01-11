@@ -6,6 +6,7 @@
 	@apply relative flex flex-col min-w-0 break-words w-full mb-6 shadow-md rounded-lg bg-white p-6;
 }
 
-html {
+html,
+* {
 	font-family: 'Poppins', sans-serif;
 }
