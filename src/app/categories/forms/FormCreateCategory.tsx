@@ -1,5 +1,3 @@
-import { InputFormik } from '@/components/@forms';
-import { categoriesService } from '@/services/categories-service';
 import useTimeOutMessage from '@/utils/hooks/useTimeOutMessage';
 import { Form, Formik } from 'formik';
 import * as React from 'react';
@@ -7,6 +5,8 @@ import { toast } from 'react-toastify';
 import { Category, CategoryDto } from '../config';
 import * as yup from 'yup';
 import ButtonFormik from '@/components/@forms/ButtonFormik';
+import categoriesService from '@/services/categories-service';
+import InputFormik from '@/components/@forms/InputFormik';
 
 interface IFormCreateCategoryProps {
 	onSuccess?: (data: Category) => void;

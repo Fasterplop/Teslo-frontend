@@ -2,7 +2,7 @@ import { Category, CategoryDto } from '@/app/categories/config';
 import { axiosClient } from '@/config/axios';
 import { CategoryRequestResponse } from './interfaces';
 
-export const categoriesService = {
+const categoriesService = {
 	getCategories: () => axiosClient.get<Category[]>('/categories'),
 	getCategory: (term: string) => axiosClient.get<Category>(`/categories/${term}`),
 	createCategory: (data: CategoryDto) =>
@@ -11,3 +11,5 @@ export const categoriesService = {
 		axiosClient.put<CategoryRequestResponse>(`/categories/${idcategory}`, data),
 	deleteCategory: (idcategory: string) => axiosClient.delete(`/categories/${idcategory}`),
 };
+
+export default categoriesService;

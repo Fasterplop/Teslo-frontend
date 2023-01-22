@@ -7,7 +7,11 @@ import { useFetchCategories } from '../hooks/useFetchCategories';
 import headingCategories from './heading';
 import mapCategories from './mapCategories';
 import { toast } from 'react-toastify';
-import { categoriesService } from '@/services/categories-service';
+import RenderIf from '@/components/ui/RenderIf';
+import categoriesService from '@/services/categories-service';
+import { AiOutlineReload } from 'react-icons/ai';
+import { ValidRoles } from '@/app/users/config';
+import AuthorityCheck from '@/components/AuthorityCheck';
 
 const FormCreateCategory = React.lazy(() => import('../forms/FormCreateCategory'));
 const FormUpdateCategory = React.lazy(() => import('../forms/FormUpdateCategory'));
@@ -20,7 +24,7 @@ const TableCategories: React.FunctionComponent<ITableCategoriesProps> = props =>
 	const [showModalDeleteCategory, setShowModalDeleteCategory] = React.useState(false);
 	const [stateCategoryDelete, setStateCategoryDelete] = React.useState<Category>(null);
 	const [isLoadingDeleteCategory, setIsLoadingDeleteCategory] = React.useState(null);
-	const { data: categories, setData, isFetching } = useFetchCategories();
+	const { data: categories, setData, isFetching, refetch } = useFetchCategories();
 
 	const setModal = useModalStore(state => state.setModal);
 	const closeModal = useModalStore(state => state.closeModal);
@@ -101,12 +105,28 @@ const TableCategories: React.FunctionComponent<ITableCategoriesProps> = props =>
 		<React.Fragment>
 			<DataTable
 				buttons={
-					<button
-						className="btn btn-primary btn-xs"
-						onClick={onCreateCategory}
-					>
-						<FaPlus />
-					</button>
+					<React.Fragment>
+						<AuthorityCheck
+							validRoles={[
+								ValidRoles.ADMIN,
+								ValidRoles.SUPER_USER,
+							]}
+						>
+							<button
+								className="btn btn-primary btn-xs"
+								onClick={onCreateCategory}
+							>
+								<FaPlus />
+							</button>
+						</AuthorityCheck>
+
+						<button
+							className="btn btn-outline-alternative btn-xs"
+							onClick={() => refetch()}
+						>
+							<AiOutlineReload />
+						</button>
+					</React.Fragment>
 				}
 				data={mapCategories({
 					categories,
@@ -116,13 +136,17 @@ const TableCategories: React.FunctionComponent<ITableCategoriesProps> = props =>
 				heading={headingCategories}
 				loading={isFetching}
 			/>
-			<ModalDeleteCategory
-				onAcceptDeleteCategory={onAcceptDeleteCategory}
-				onCloseModalDelete={onCloseModalDelete}
-				showModalDeleteCategory={showModalDeleteCategory}
-				category={stateCategoryDelete}
-				isLoading={isLoadingDeleteCategory}
-			/>
+			<RenderIf isTrue={showModalDeleteCategory}>
+				<React.Suspense fallback={<></>}>
+					<ModalDeleteCategory
+						onAcceptDeleteCategory={onAcceptDeleteCategory}
+						onCloseModalDelete={onCloseModalDelete}
+						showModalDeleteCategory={showModalDeleteCategory}
+						category={stateCategoryDelete}
+						isLoading={isLoadingDeleteCategory}
+					/>
+				</React.Suspense>
+			</RenderIf>
 		</React.Fragment>
 	);
 };

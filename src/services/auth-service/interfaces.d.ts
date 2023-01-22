@@ -1,20 +1,13 @@
-import { User } from "@/app/users/config";
+import { User, UserDto } from '@/app/users/config';
 
 export interface ReturnValuesLogin {
-  user: User;
-  token: string;
+	user: User;
+	token: string;
 }
 
 export interface LoginUserDto {
-  username: string;
-  password: string;
+	username: string;
+	password: string;
 }
 
-export interface SignUpUserDto {
-  firstName: string;
-  lastName: string;
-  password: string;
-  email: string;
-  phone: string;
-  token: string;
-}
+export interface SignUpUserDto extends UserDto {}

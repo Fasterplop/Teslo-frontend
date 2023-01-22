@@ -1,4 +1,4 @@
-import AuthorityCheck from '@/components/ui/AuthorityCheck';
+import AuthorityCheck from '@/components/AuthorityCheck';
 import classNames from 'classnames';
 import * as React from 'react';
 import { FaChevronDown, FaCircleNotch } from 'react-icons/fa';
@@ -84,7 +84,10 @@ const CollapsedItem: React.FunctionComponent<ICollapsedItemProps> = props => {
 			}
 		>
 			{item.subNav.map(subNavItem => (
-				<DropdownItem className="flex items-center" key={subNavItem.title}>
+				<DropdownItem
+					className="flex items-center pr-12"
+					key={subNavItem.title}
+				>
 					<FaCircleNotch className="mr-1 text-xs" />{' '}
 					<Link to={subNavItem.path}>{subNavItem.title}</Link>
 				</DropdownItem>
@@ -109,68 +112,3 @@ const VerticalMenuCollapsedItem: React.FC<IVerticalMenuCollapsedItemProps> = pro
 };
 
 export default VerticalMenuCollapsedItem;
-
-/* const CollapsedItem = ({nav, onLinkClick, userAuthority, direction}) => {
-
-	const menuItem = (
-		<MenuItem key={nav.key} eventKey={nav.key} className="mb-2">
-			<VerticalMenuIcon icon={nav.icon} />
-		</MenuItem>
-	)
-
-	return (
-		<AuthorityCheck 
-			userAuthority={userAuthority} 
-			authority={nav.authority}
-		>
-			<Dropdown 
-				trigger="hover" 
-				renderTitle={menuItem} 
-				placement={direction === 'rtl' ? 'middle-end-top' : 'middle-start-top'}
-			>
-				{
-					nav.subMenu.map(subNav => (
-						<AuthorityCheck 
-							userAuthority={userAuthority} 
-							authority={subNav.authority}
-							key={subNav.key}
-						>
-							<Dropdown.Item eventKey={subNav.key}> 
-								{subNav.path 
-									? 
-									<Link 
-										className="h-full w-full flex items-center" 
-										onClick={() => onLinkClick?.(
-											{
-												key: subNav.key,
-												title: subNav.title,
-												path: subNav.path,
-											}
-										)} 
-										to={subNav.path}
-									>
-										<span>
-											<Trans i18nKey={subNav.translateKey} defaults={subNav.title} />
-										</span>
-									</Link>
-									: 
-									<span>
-										<Trans i18nKey={subNav.translateKey} defaults={subNav.title} />
-									</span>
-								}
-							</Dropdown.Item>
-						</AuthorityCheck>
-					))
-				}
-			</Dropdown>
-		</AuthorityCheck>
-	)
-} */
-/* 
-const VerticalCollapsedMenuItem = ({sideCollapsed, ...rest}) => {
-
-	return sideCollapsed ? <CollapsedItem {...rest} /> : <DefaultItem {...rest} />
-}
-
-export default VerticalCollapsedMenuItem
- */

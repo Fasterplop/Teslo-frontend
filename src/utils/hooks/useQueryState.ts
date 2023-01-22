@@ -34,8 +34,6 @@ const useQueryState = <T = unknown>(
 		}
 	}, [query.data, query.isFetching]);
 
-	console.log(query.data);
-
 	return {
 		...query,
 		data: data || query.data,

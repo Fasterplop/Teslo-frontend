@@ -42,7 +42,7 @@ const Dropdown: React.FunctionComponent<IDropdownProps> = props => {
 					>
 						<Menu.Items
 							className={classNames(
-								'absolute z-10 mt-0 rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none',
+								'absolute z-10 mt-0 rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none w-auto',
 								placementClassName
 							)}
 						>

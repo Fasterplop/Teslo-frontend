@@ -1,12 +1,146 @@
+import {
+	FindOrdersAnioResponse,
+	FindOrdersByAnioMonthResponse,
+	TotalCountersResponse,
+} from '@/services/dashboard-service/interface';
 import * as React from 'react';
+import Loader from '@/components/ui/Loader';
+import dashboardService from '@/services/dashboard-service';
+import { User } from '../users/config';
+import WidgetsDashboardAdmin from './Widgets/WidgetsDashboardAdmin';
+import TableUserDashboard from './Tables/TableUserDashboard';
+import TableOrdersDashboard from './Tables/TableOrdersDashboard';
+import { Order } from '../orders/config';
+
+const BarChartYearOrders = React.lazy(() => import('./charts/BarChartYearOrders'));
+const LineChartOrders = React.lazy(() => import('./charts/LineChartOrders'));
 
 interface IDashboardPageProps {}
 
+const today = new Date();
+const yearCurrent = today.getFullYear();
+const monthCurrent = today.getMonth() + 1;
+
 const DashboardPage: React.FunctionComponent<IDashboardPageProps> = props => {
+	const {} = props;
+	const [loading, setLoading] = React.useState(true);
+	const [totales, setTotales] = React.useState<TotalCountersResponse>({
+		totalCategories: 0,
+		totalOrders: 0,
+		totalProducts: 0,
+		totalUsers: 0,
+	});
+	const [tenLastUser, setTenLastUser] = React.useState<User[]>([]);
+	const [tenOrders, setTenOrders] = React.useState<Order[]>([]);
+	const [ordersByYear, setOrdersByYear] = React.useState<FindOrdersAnioResponse>({
+		year: yearCurrent,
+		orders: [],
+	});
+	const [ordersByYearMonth, setOrdersByYearMonth] =
+		React.useState<FindOrdersByAnioMonthResponse>({
+			year: yearCurrent,
+			month: '',
+			total: '0',
+			orders: [],
+		});
+
+	React.useEffect(() => {
+		async function init() {
+			try {
+				setLoading(true);
+				const [
+					responseCounters,
+					responseTenUsers,
+					responseTenOrders,
+					responseOrdersByYear,
+					responseOrdersByYearMonth,
+				] = await Promise.all([
+					dashboardService.counters(),
+					dashboardService.getLastTenUsers(),
+					dashboardService.getLastTenOrders(),
+					dashboardService.findAllOrdersByYear(yearCurrent),
+					dashboardService.findAllOrdersByYearMonth(
+						yearCurrent,
+						monthCurrent
+					),
+				]);
+
+				setTotales(responseCounters.data);
+				setTenLastUser(responseTenUsers.data);
+				setTenOrders(responseTenOrders.data);
+				setOrdersByYear(responseOrdersByYear.data);
+				setOrdersByYearMonth(responseOrdersByYearMonth.data);
+			} catch (error) {
+				console.log(error);
+			} finally {
+				setLoading(false);
+			}
+		}
+
+		init();
+	}, []);
+
+	if (loading) return <Loader loading={true} />;
+
 	return (
 		<div>
-			<div className="tile text-center">
-				<h3>Bienvenido al Dashboard de Dario</h3>
+			<div className="grid lg:grid-cols-2 gap-4">
+				<div>
+					<div className="grid lg:grid-cols-2 gap-4">
+						<WidgetsDashboardAdmin totales={totales} />
+					</div>
+				</div>
+				<div>
+					<div className="tile"></div>
+				</div>
+			</div>
+
+			<div className="grid lg:grid-cols-12 gap-4 mt-6">
+				<div className="lg:col-span-5 xl:col-span-4">
+					<div className="tile">
+						<h6 className="mb-3">Users</h6>
+						<TableUserDashboard
+							users={tenLastUser}
+							setUsers={setTenLastUser}
+						/>
+					</div>
+				</div>
+
+				<div className="lg:col-span-7 xl:col-span-8">
+					<div className="tile">
+						<h6 className="mb-3">Orders</h6>
+						<TableOrdersDashboard
+							orders={tenOrders}
+							setOrders={setTenOrders}
+						/>
+					</div>
+				</div>
+			</div>
+
+			<div className="grid lg:grid-cols-2 gap-4 mt-6">
+				<div className="tile">
+					<h6 className="mb-3">
+						Total orders by month ({ordersByYear.year})
+					</h6>
+					<React.Suspense fallback={<Loader loading={true} />}>
+						<BarChartYearOrders
+							orders={ordersByYear}
+							setOrders={setOrdersByYear}
+						/>
+					</React.Suspense>
+				</div>
+				<div className="tile">
+					<h6 className="mb-3">
+						Total orders by day ({ordersByYearMonth.month} -{' '}
+						{ordersByYearMonth.year})
+					</h6>
+					<React.Suspense fallback={<Loader loading={true} />}>
+						<LineChartOrders
+							orders={ordersByYearMonth}
+							setOrders={setOrdersByYearMonth}
+						/>
+					</React.Suspense>
+				</div>
 			</div>
 		</div>
 	);

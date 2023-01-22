@@ -1,7 +1,9 @@
+import AuthorityCheck from '@/components/AuthorityCheck';
 import { protectedRoutes, validPaths } from '@/utils';
 import * as React from 'react';
 import { FaEye, FaPen, FaTrash } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
+import { ValidRoles } from '@/app/users/config';
 import { Category } from '../config';
 
 interface IActionsCategoryProps {
@@ -19,23 +21,25 @@ const ActionsCategory: React.FunctionComponent<IActionsCategoryProps> = props =>
 	return (
 		<div>
 			<Link
-				to={protectedRoutes.categoriesPage.fnPath(category.idcategory)}
+				to={protectedRoutes.viewCategory.fnPath(category.idcategory)}
 				className="btn btn-success btn-xs"
 			>
 				<FaEye />
 			</Link>
-			<button
-				className="btn btn-primary btn-xs"
-				onClick={handleClickUpdateCategory}
-			>
-				<FaPen />
-			</button>
-			<button
-				className="btn btn-danger btn-xs"
-				onClick={handleClickDeleteCategory}
-			>
-				<FaTrash />
-			</button>
+			<AuthorityCheck validRoles={[ValidRoles.ADMIN, ValidRoles.SUPER_USER]}>
+				<button
+					className="btn btn-primary btn-xs"
+					onClick={handleClickUpdateCategory}
+				>
+					<FaPen />
+				</button>
+				<button
+					className="btn btn-danger btn-xs"
+					onClick={handleClickDeleteCategory}
+				>
+					<FaTrash />
+				</button>
+			</AuthorityCheck>
 		</div>
 	);
 };

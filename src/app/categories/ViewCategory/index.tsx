@@ -1,17 +1,19 @@
 import Loader from '@/components/ui/Loader';
 import { useModalStore } from '@/store';
 import * as React from 'react';
-import { FaPen, FaTrash } from 'react-icons/fa';
 import { Navigate, useNavigate, useParams } from 'react-router-dom';
-import { Category } from './config';
-import { useFetchCategory } from './hooks/useFetchCategory';
-import dayjs from 'dayjs';
-import { categoriesService } from '@/services/categories-service';
+import { Category } from '../config';
+import { useFetchCategory } from '../hooks/useFetchCategory';
 import { toast } from 'react-toastify';
 import { protectedRoutes } from '@/utils';
+import categoriesService from '@/services/categories-service';
+import HeaderViewCategory from './HeaderViewCategory';
+import TableProductsByCategoryId from './TableProductsByCategoryId';
+import { FaChevronLeft, FaChevronRight } from 'react-icons/fa';
+import HeaderDashboard from '@/layouts/HeaderDashboardLayout';
 
-const FormUpdateCategory = React.lazy(() => import('./forms/FormUpdateCategory'));
-const ModalDeleteCategory = React.lazy(() => import('./TableCategories/ModalDeleteCategory'));
+const FormUpdateCategory = React.lazy(() => import('../forms/FormUpdateCategory'));
+const ModalDeleteCategory = React.lazy(() => import('../TableCategories/ModalDeleteCategory'));
 
 interface IViewCategoryPageProps {}
 
@@ -27,7 +29,6 @@ const ViewCategoryPage: React.FunctionComponent<IViewCategoryPageProps> = props 
 
 	const onUpdateCategory = () => {
 		const onSuccess = (data: Category) => {
-			console.log(data);
 			setData({ ...category, ...data });
 			closeModal();
 		};
@@ -72,66 +73,20 @@ const ViewCategoryPage: React.FunctionComponent<IViewCategoryPageProps> = props 
 		}
 	};
 
-	console.log(isFetching, category);
-
 	if (isFetching) return <Loader loading={true} />;
 
 	if (!category) return <Navigate replace to={protectedRoutes.categories.path} />;
 
 	return (
 		<React.Fragment>
-			<div className="grid lg:grid-cols-12 lg:gap-8 gap-4">
-				<div className="tile lg:col-span-4">
-					<div className="flex items-center justify-center mb-4">
-						<img
-							src={
-								category.image ||
-								'/img/others/box.png'
-							}
-							className={'w-32'}
-							alt=""
-						/>
-					</div>
-					<div className="flex flex-col justify-center items-center">
-						<button
-							onClick={onUpdateCategory}
-							className="mx-auto w-full btn btn-primary btn-sm"
-						>
-							Update Category <FaPen className="ml-2" />
-						</button>
+			<HeaderDashboard to="/categories">Categories</HeaderDashboard>
+			<HeaderViewCategory
+				category={category}
+				onDeleteCategory={onDeleteCategory}
+				onUpdateCategory={onUpdateCategory}
+			/>
 
-						<button
-							className="mx-auto w-full btn btn-danger btn-sm"
-							onClick={onDeleteCategory}
-						>
-							Delete Category <FaTrash className="ml-2" />
-						</button>
-					</div>
-				</div>
-				<div className="tile lg:col-span-8">
-					<h4 className="mb-6">{category.title}</h4>
-					<div className="text-sm space-y-3">
-						<p>
-							<span className="font-bold">ID:</span>{' '}
-							{category.idcategory}
-						</p>
-
-						<p>
-							<span className="font-bold">
-								Date Created:
-							</span>{' '}
-							{dayjs(category.dateCreated).format(
-								'DD/MM/YYYY HH:mm:ss'
-							)}
-						</p>
-
-						<p>
-							<span className="font-bold">Slug:</span>{' '}
-							{category.slug}
-						</p>
-					</div>
-				</div>
-			</div>
+			<TableProductsByCategoryId category={category} />
 
 			<ModalDeleteCategory
 				onAcceptDeleteCategory={onAcceptDeleteCategory}

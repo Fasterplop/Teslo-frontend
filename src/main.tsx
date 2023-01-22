@@ -14,3 +14,9 @@ ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
 		<App />
 	</QueryClientProvider>
 );
+
+declare namespace File {
+	interface File {
+		id: string;
+	}
+}

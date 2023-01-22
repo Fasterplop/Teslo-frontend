@@ -1,4 +1,4 @@
-import { categoriesService } from '@/services/categories-service';
+import categoriesService from '@/services/categories-service';
 import useQueryState from '@/utils/hooks/useQueryState';
 import { QueryFunctionContext } from '@tanstack/react-query';
 

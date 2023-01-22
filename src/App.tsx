@@ -31,6 +31,7 @@ const App: React.FunctionComponent<IAppProps> = props => {
 				theme="light"
 				position="bottom-right"
 				style={{ fontFamily: 'Poppins' }}
+				toastClassName={''}
 			/>
 			<React.Suspense fallback={<></>}>
 				<RenderIf isTrue={show}>

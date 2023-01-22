@@ -1,7 +1,7 @@
 import { ValidRol } from '@/app/users/config';
 import { useAuthStore } from '@/store';
 import * as React from 'react';
-import RenderIf from '../RenderIf';
+import RenderIf from '../ui/RenderIf';
 
 interface IAuthorityCheckProps {
 	children?: React.ReactNode;
@@ -15,7 +15,9 @@ const AuthorityCheck: React.FunctionComponent<IAuthorityCheckProps> = props => {
 
 	if (validRoles === '*') return <>{children}</>;
 
-	return <RenderIf isTrue={true}>{children}</RenderIf>;
+	const isTrue = userRoles.some(role => validRoles?.includes(role));
+
+	return <RenderIf isTrue={isTrue}>{children}</RenderIf>;
 };
 
 export default AuthorityCheck;

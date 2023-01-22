@@ -1,8 +1,9 @@
-import { useFormikContext, getIn, Field, ErrorMessage } from 'formik';
+import { useFormikContext, getIn, Field } from 'formik';
 import * as React from 'react';
 import classNames from 'classnames';
 import Label from '../label';
 import RenderIf from '@/components/ui/RenderIf';
+import { NumericFormat } from 'react-number-format';
 
 interface IInputFormikProps {
 	type?: React.HTMLInputTypeAttribute;
@@ -18,6 +19,7 @@ interface IInputFormikProps {
 	showSuccess?: boolean;
 	showError?: boolean;
 	forceErrorMessage?: string;
+	decimalValues?: boolean;
 }
 
 const InputFormik: React.FunctionComponent<IInputFormikProps> = props => {
@@ -35,8 +37,11 @@ const InputFormik: React.FunctionComponent<IInputFormikProps> = props => {
 		showError,
 		showSuccess,
 		forceErrorMessage,
+		decimalValues,
 	} = props;
-	const { errors, touched } = useFormikContext();
+	const { errors, values, touched, setFieldValue, handleBlur } = useFormikContext();
+	const isInputNumber = type === 'number';
+	const value = getIn(values, name);
 	const error = getIn(errors, name);
 	const isTouched = getIn(touched, name);
 	const validateError = (error && isTouched && showError) || Boolean(forceErrorMessage);
@@ -51,19 +56,38 @@ const InputFormik: React.FunctionComponent<IInputFormikProps> = props => {
 				className
 			)}
 		>
-			<Label htmlFor={name} className={classNameLabel}>
+			<Label htmlFor={name} required={required} className={classNameLabel}>
 				{label}
 			</Label>
-			<Field
-				type={type}
-				className={classNames('form-control', classNameInput)}
-				disabled={disabled}
-				required={required}
-				autoComplete={autoComplete}
-				placeholder={placeholder}
-				name={name}
-				id={name}
-			/>
+
+			{isInputNumber ? (
+				<NumericFormat
+					value={value}
+					thousandSeparator={'.'}
+					decimalSeparator={','}
+					onValueChange={values => {
+						setFieldValue(name, values.floatValue);
+					}}
+					prefix={decimalValues ? '$ ' : ''}
+					onBlur={handleBlur}
+					className={classNames('form-control', classNameInput)}
+					disabled={disabled}
+					autoComplete={autoComplete}
+					placeholder={placeholder}
+					name={name}
+					id={name}
+				/>
+			) : (
+				<Field
+					type={type}
+					className={classNames('form-control', classNameInput)}
+					disabled={disabled}
+					autoComplete={autoComplete}
+					placeholder={placeholder}
+					name={name}
+					id={name}
+				/>
+			)}
 
 			<RenderIf isTrue={validateError}>
 				<p>{error || forceErrorMessage}</p>
@@ -77,6 +101,7 @@ InputFormik.defaultProps = {
 	autoComplete: 'on',
 	showError: true,
 	showSuccess: true,
+	decimalValues: true,
 };
 
 export default InputFormik;

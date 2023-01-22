@@ -2,7 +2,6 @@ import useTimeOutMessage from '@/utils/hooks/useTimeOutMessage';
 import * as React from 'react';
 import * as Yup from 'yup';
 import { Form, Formik } from 'formik';
-import { InputFormik } from '@/components/@forms';
 import { LoginUserDto } from '@/services/auth-service/interfaces';
 import { authService } from '@/services/auth-service';
 import ButtonFormik from '@/components/@forms/ButtonFormik';
@@ -11,6 +10,7 @@ import RenderIf from '@/components/ui/RenderIf';
 import Alert from '@/components/ui/Alert';
 import { useAuthStore } from '@/store/authStore';
 import { useModalStore } from '@/store';
+import InputFormik from '@/components/@forms/InputFormik';
 
 const ForgottenPasswordForm = React.lazy(() => import('./ForgottenPasswordForm'));
 

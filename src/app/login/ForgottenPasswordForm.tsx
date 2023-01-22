@@ -1,13 +1,16 @@
-import { InputFormik } from '@/components/@forms';
 import ButtonFormik from '@/components/@forms/ButtonFormik';
+import InputFormik from '@/components/@forms/InputFormik';
+import usersService from '@/services/users-service';
+import { SendRequestPasswordRecoverDto } from '@/services/users-service/interfaces';
 import { useModalStore } from '@/store';
 import { Form, Formik } from 'formik';
 import * as React from 'react';
+import { toast } from 'react-toastify';
 import * as Yup from 'yup';
 
 interface IForgottenPasswordFormProps {}
 
-const INITIAL_VALUES = {
+const INITIAL_VALUES: SendRequestPasswordRecoverDto = {
 	email: '',
 };
 
@@ -19,10 +22,17 @@ const ForgottenPasswordForm: React.FunctionComponent<IForgottenPasswordFormProps
 	const {} = props;
 	const { closeModal } = useModalStore();
 
-	const onSubmit = (values: typeof INITIAL_VALUES) => {
+	const onSubmit = async (values: SendRequestPasswordRecoverDto) => {
 		try {
+			const req = await usersService.sendRequestPassword(values);
+			toast.success(req.data.msg);
 			closeModal();
-		} catch (error) {}
+		} catch (error) {
+			console.log(error);
+			toast.error(
+				error.response.data.message || 'Error sending message to the email'
+			);
+		}
 	};
 
 	return (

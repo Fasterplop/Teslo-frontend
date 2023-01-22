@@ -58,11 +58,18 @@ const SidebarDashboard: React.FC<ISidebarDashboardProps> = props => {
 				<div
 					style={isCollapsed ? sideNavCollapseStyle : sideNavStyle}
 					className={classNames(
-						'side-nav side-nav-light',
+						'side-nav side-nav-light print:hidden',
 						!isCollapsed && 'side-nav-expand'
 					)}
 				>
-					<div className="side-nav-header">
+					<div
+						className="side-nav-header fixed py-[0.95rem]"
+						style={
+							isCollapsed
+								? sideNavCollapseStyle
+								: sideNavStyle
+						}
+					>
 						<Link to={validPaths.dashboard.path}>
 							<Logo
 								type={

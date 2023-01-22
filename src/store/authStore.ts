@@ -1,6 +1,5 @@
 import { User } from '@/app/users/config';
 import { hideLoader } from '@/components/ui/Loader';
-import { axiosClient } from '@/config/axios';
 import tokenAuth from '@/config/token';
 import { authService } from '@/services/auth-service';
 import { ReturnValuesLogin } from '@/services/auth-service/interfaces';
@@ -46,8 +45,17 @@ export const useAuthStore = create<AuthStoreValues>(set => ({
 		}
 
 		try {
-			if (!localStorage.getItem('at')) return;
+			if (!localStorage.getItem('at')) {
+				set({
+					user: {},
+					accessToken: null,
+					loading: false,
+					authenticated: false,
+				});
+				return;
+			}
 			const req = await authService.refresh();
+
 			tokenAuth(req.data.token);
 			localStorage.setItem('at', req.data.token);
 			setUser(req.data.user);

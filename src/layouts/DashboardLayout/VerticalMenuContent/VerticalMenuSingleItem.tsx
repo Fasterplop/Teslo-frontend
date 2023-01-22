@@ -1,4 +1,4 @@
-import AuthorityCheck from '@/components/ui/AuthorityCheck';
+import AuthorityCheck from '@/components/AuthorityCheck';
 import RenderIf from '@/components/ui/RenderIf';
 import ToolTip from '@/components/ui/Tooltip';
 import * as React from 'react';
