@@ -1,6 +1,7 @@
 import {
 	FindOrdersAnioResponse,
 	FindOrdersByAnioMonthResponse,
+	FindPaymentMethodsByYearMonth,
 	TotalCountersResponse,
 } from '@/services/dashboard-service/interface';
 import * as React from 'react';
@@ -14,6 +15,7 @@ import { Order } from '../orders/config';
 
 const BarChartYearOrders = React.lazy(() => import('./charts/BarChartYearOrders'));
 const LineChartOrders = React.lazy(() => import('./charts/LineChartOrders'));
+const ChartPiePaymentMethods = React.lazy(() => import('./charts/ChartPiePaymentMethods'));
 
 interface IDashboardPageProps {}
 
@@ -43,6 +45,12 @@ const DashboardPage: React.FunctionComponent<IDashboardPageProps> = props => {
 			total: '0',
 			orders: [],
 		});
+	const [paymentMethodsByYearMonth, setPaymentMethodsByYearMonth] =
+		React.useState<FindPaymentMethodsByYearMonth>({
+			year: yearCurrent,
+			month: '',
+			paymentMethods: [],
+		});
 
 	React.useEffect(() => {
 		async function init() {
@@ -54,12 +62,17 @@ const DashboardPage: React.FunctionComponent<IDashboardPageProps> = props => {
 					responseTenOrders,
 					responseOrdersByYear,
 					responseOrdersByYearMonth,
+					responsePaymentMethods,
 				] = await Promise.all([
 					dashboardService.counters(),
 					dashboardService.getLastTenUsers(),
 					dashboardService.getLastTenOrders(),
 					dashboardService.findAllOrdersByYear(yearCurrent),
 					dashboardService.findAllOrdersByYearMonth(
+						yearCurrent,
+						monthCurrent
+					),
+					dashboardService.findPaymentMethodsByYearMonth(
 						yearCurrent,
 						monthCurrent
 					),
@@ -70,6 +83,7 @@ const DashboardPage: React.FunctionComponent<IDashboardPageProps> = props => {
 				setTenOrders(responseTenOrders.data);
 				setOrdersByYear(responseOrdersByYear.data);
 				setOrdersByYearMonth(responseOrdersByYearMonth.data);
+				setPaymentMethodsByYearMonth(responsePaymentMethods.data);
 			} catch (error) {
 				console.log(error);
 			} finally {
@@ -82,6 +96,7 @@ const DashboardPage: React.FunctionComponent<IDashboardPageProps> = props => {
 
 	if (loading) return <Loader loading={true} />;
 
+	console.log(paymentMethodsByYearMonth);
 	return (
 		<div>
 			<div className="grid lg:grid-cols-2 gap-4">
@@ -91,7 +106,19 @@ const DashboardPage: React.FunctionComponent<IDashboardPageProps> = props => {
 					</div>
 				</div>
 				<div>
-					<div className="tile"></div>
+					<div className="tile">
+						<h6 className="mb-3">
+							Total Payment Methods (
+							{paymentMethodsByYearMonth.month} -{' '}
+							{paymentMethodsByYearMonth.year})
+						</h6>
+						<ChartPiePaymentMethods
+							paymentMethods={paymentMethodsByYearMonth}
+							setPaymentMethods={
+								setPaymentMethodsByYearMonth
+							}
+						/>
+					</div>
 				</div>
 			</div>
 

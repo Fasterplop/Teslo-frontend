@@ -3,7 +3,7 @@ import InputFormik from '@/components/@forms/InputFormik';
 import paymentMethodService from '@/services/paymentMethod-service/paymentMethod-service';
 import { AxiosResponse } from 'axios';
 import classNames from 'classnames';
-import { Form, Formik } from 'formik';
+import { Form, Formik, FormikHelpers } from 'formik';
 import * as React from 'react';
 import { toast } from 'react-toastify';
 import * as yup from 'yup';
@@ -31,7 +31,7 @@ const FormPaymentMethod: React.FunctionComponent<IFormPaymentMethodProps> = prop
 					dni: paymentMethod.dni,
 			  };
 
-	async function onSubmit(data: PaymentMethodDto) {
+	async function onSubmit(data: PaymentMethodDto, actions: FormikHelpers<PaymentMethodDto>) {
 		try {
 			let req: AxiosResponse<PaymentMethod>;
 
@@ -49,6 +49,7 @@ const FormPaymentMethod: React.FunctionComponent<IFormPaymentMethodProps> = prop
 					: 'Payment Method updated successfully'
 			);
 			onSuccess(req.data);
+			if (state === 'create') actions.resetForm();
 		} catch (error) {
 			console.log(error);
 			toast.error('There was an error setting the payment method');

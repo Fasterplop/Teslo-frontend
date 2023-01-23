@@ -1,3 +1,4 @@
+import { PF } from '@/utils';
 import dayjs from 'dayjs';
 import { Category, CategoryDataTable } from '../config';
 import ActionsCategory from './ActionCategorys';
@@ -15,7 +16,11 @@ const mapCategories = (props: IMapCategoriesProps): CategoryDataTable[] => {
 		dateFormatted: dayjs(category.dateCreated).format('DD/MM/YYYY HH:mm:ss'),
 		imgTable: (
 			<img
-				src={category.image || '/img/others/box.png'}
+				src={
+					category.image
+						? PF + '/category/' + category.image
+						: '/img/others/box.png'
+				}
 				className={'w-16 mx-auto'}
 				alt={'Box default Image'}
 			/>

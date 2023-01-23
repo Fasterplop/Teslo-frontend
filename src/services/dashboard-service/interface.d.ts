@@ -1,3 +1,5 @@
+import { PaymentMethod } from '@/app/config/PaymenMethods/config';
+
 export interface TotalCountersResponse {
 	totalCategories: number;
 	totalOrders: number;
@@ -22,4 +24,10 @@ export interface FindOrdersAnioResponse {
 		num_month: number;
 		sell: number;
 	}>;
+}
+
+export interface FindPaymentMethodsByYearMonth {
+	year: number;
+	month: string;
+	paymentMethods: (PaymentMethod & { quantity: number; total: number })[];
 }

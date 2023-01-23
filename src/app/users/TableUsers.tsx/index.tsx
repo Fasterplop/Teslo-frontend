@@ -112,8 +112,6 @@ const TableUsers: React.FunctionComponent<ITableUsersProps> = props => {
 		}
 	};
 
-	console.log(heading);
-
 	return (
 		<>
 			<DataTable

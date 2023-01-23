@@ -1,8 +1,11 @@
 import DataTable, { HeaderDataTable } from '@/components/ui/DataTable';
+import RenderIf from '@/components/ui/RenderIf';
+import paymentMethodService from '@/services/paymentMethod-service/paymentMethod-service';
 import classNames from 'classnames';
 import * as React from 'react';
 import { AiOutlineReload } from 'react-icons/ai';
 import { FaPlus } from 'react-icons/fa';
+import { toast } from 'react-toastify';
 import { PaymentMethod } from '../config';
 import FormPaymentMethod from '../Forms/FormPaymentMethod';
 import { useFetchPaymentMethods } from '../hooks/useFetchPaymentMethods';
@@ -11,12 +14,21 @@ import mapPaymentMethods from './mapPaymentMethods';
 
 interface ITablePaymentMethodsProps {
 	heading?: HeaderDataTable[];
+	setSelected: React.Dispatch<number>;
 }
 
+const ModalDeletePaymentMethod = React.lazy(() => import('./ModalDeletePaymentMethod'));
+
 const TablePaymentMethods: React.FunctionComponent<ITablePaymentMethodsProps> = props => {
-	const { heading } = props;
+	const { heading, setSelected } = props;
 	const [stateForm, setStateForm] = React.useState<'create' | 'update'>('create');
 	const [tempPaymentMethod, setTempPaymentMethod] = React.useState<PaymentMethod>(null);
+	const [showDeletePaymentMethod, setShowDeletePaymentMethod] = React.useState(false);
+	const [isLoadingDeletePaymentMethod, setIsLoadingDeletePaymentMethod] =
+		React.useState(false);
+	const [tempPaymentMethodDelete, setTempPaymentMethodDelete] =
+		React.useState<PaymentMethod>(null);
+
 	const { isFetching, data: paymentMethods, setData, refetch } = useFetchPaymentMethods();
 
 	function onSuccessForm(paymentMethod: PaymentMethod) {
@@ -33,7 +45,41 @@ const TablePaymentMethods: React.FunctionComponent<ITablePaymentMethodsProps> = 
 		}
 	}
 
-	async function deletePaymentMethod(paymentMethod: PaymentMethod) {}
+	function deletePaymentMethod(paymentMethod: PaymentMethod) {
+		setShowDeletePaymentMethod(true);
+		setTempPaymentMethodDelete(paymentMethod);
+	}
+
+	function onCloseModalDelete() {
+		setShowDeletePaymentMethod(false);
+		setTempPaymentMethodDelete(null);
+	}
+
+	async function onAcceptModaDelete() {
+		try {
+			setIsLoadingDeletePaymentMethod(true);
+			await paymentMethodService.deleteOne(
+				tempPaymentMethodDelete.idpaymentmethod
+			);
+			setData(
+				paymentMethods.filter(
+					p =>
+						p.idpaymentmethod !==
+						tempPaymentMethodDelete.idpaymentmethod
+				)
+			);
+			onCloseModalDelete();
+			toast.success('Payment Method deleted successfully');
+		} catch (error) {
+			console.log(error);
+			toast.error(
+				error.response.data.message ||
+					'There was an error deleting the user'
+			);
+		} finally {
+			setIsLoadingDeletePaymentMethod(false);
+		}
+	}
 
 	function updatePaymentMethod(paymentMethod: PaymentMethod) {
 		setTempPaymentMethod(paymentMethod);
@@ -43,6 +89,10 @@ const TablePaymentMethods: React.FunctionComponent<ITablePaymentMethodsProps> = 
 	function createPaymentMethod() {
 		setTempPaymentMethod(null);
 		setStateForm('create');
+	}
+
+	function setViewOrdersByPaymentMethod(paymentMethod: PaymentMethod) {
+		setSelected(paymentMethod.idpaymentmethod);
 	}
 
 	return (
@@ -73,6 +123,7 @@ const TablePaymentMethods: React.FunctionComponent<ITablePaymentMethodsProps> = 
 							paymentMethods,
 							updatePaymentMethod,
 							deletePaymentMethod,
+							setViewOrdersByPaymentMethod,
 						})}
 						heading={heading}
 					/>
@@ -100,6 +151,16 @@ const TablePaymentMethods: React.FunctionComponent<ITablePaymentMethodsProps> = 
 					/>
 				</div>
 			</div>
+
+			<RenderIf isTrue={showDeletePaymentMethod}>
+				<ModalDeletePaymentMethod
+					onAcceptDeletePaymentMethod={onAcceptModaDelete}
+					onCloseModalDelete={onCloseModalDelete}
+					isLoading={isLoadingDeletePaymentMethod}
+					showModalDeletePaymentMethod={showDeletePaymentMethod}
+					paymentMethod={tempPaymentMethodDelete}
+				/>
+			</RenderIf>
 		</div>
 	);
 };

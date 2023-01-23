@@ -76,6 +76,7 @@ const SignInForm: React.FunctionComponent<ISignInFormProps> = props => {
 					label="Username"
 					placeholder="Type your username"
 					showSuccess={false}
+					classNameLabel={'text-xs'}
 				/>
 
 				<InputFormik
@@ -85,6 +86,7 @@ const SignInForm: React.FunctionComponent<ISignInFormProps> = props => {
 					placeholder="Type your password"
 					autoComplete="off"
 					showSuccess={false}
+					classNameLabel={'text-xs'}
 				/>
 
 				<div className="form-group">
@@ -93,7 +95,7 @@ const SignInForm: React.FunctionComponent<ISignInFormProps> = props => {
 					</ButtonFormik>
 				</div>
 
-				<p className="text-center">
+				<p className="text-center text-sm">
 					Have you forgotten your{' '}
 					<button
 						type="button"

@@ -13,6 +13,7 @@ import { Line } from 'react-chartjs-2';
 import { FindOrdersByAnioMonthResponse } from '@/services/dashboard-service/interface';
 import { DatePicker } from 'react-rainbow-components';
 import dashboardService from '@/services/dashboard-service';
+import Loader from '@/components/ui/Loader';
 
 ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend);
 
@@ -42,6 +43,8 @@ const LineChartOrders: React.FunctionComponent<ILineChartOrdersProps> = props =>
 			setIsLoading(false);
 		}
 	}
+
+	if (isLoading) return <Loader loading={true} />;
 
 	return (
 		<React.Fragment>

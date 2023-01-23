@@ -1,3 +1,4 @@
+import { PF } from '@/utils';
 import dayjs from 'dayjs';
 import * as React from 'react';
 import { FaPen, FaTrash } from 'react-icons/fa';
@@ -17,7 +18,11 @@ const HeaderViewCategory: React.FunctionComponent<IHeaderViewCategoryProps> = pr
 			<div className="tile lg:col-span-4">
 				<div className="flex items-center justify-center mb-4">
 					<img
-						src={category.image || '/img/others/box.png'}
+						src={
+							category.image
+								? PF + '/category/' + category.image
+								: '/img/others/box.png'
+						}
 						className={'w-32'}
 						alt=""
 					/>

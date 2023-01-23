@@ -4,6 +4,7 @@ import { axiosClient } from '@/config/axios';
 import {
 	FindOrdersAnioResponse,
 	FindOrdersByAnioMonthResponse,
+	FindPaymentMethodsByYearMonth,
 	TotalCountersResponse,
 } from './interface';
 
@@ -14,6 +15,10 @@ const dashboardService = {
 	findAllOrdersByYearMonth: (year: number, month: number) =>
 		axiosClient.get<FindOrdersByAnioMonthResponse>(
 			`/dashboard/findOrders/${year}/${month}`
+		),
+	findPaymentMethodsByYearMonth: (year: number, month: number) =>
+		axiosClient.get<FindPaymentMethodsByYearMonth>(
+			`/dashboard/findPaymentMethods/${year}/${month}`
 		),
 	getLastTenUsers: () => axiosClient.get<User[]>('/dashboard/getTenUsers'),
 	getLastTenOrders: () => axiosClient.get<Order[]>('/dashboard/getTenOrders'),

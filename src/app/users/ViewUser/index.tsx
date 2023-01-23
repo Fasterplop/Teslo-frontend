@@ -12,6 +12,7 @@ import { toast } from 'react-toastify';
 import { UserDto, ValidRol, ValidRoles } from '../config';
 import { protectedRoutes } from '@/utils';
 import { useFetcUser } from '../hooks/useFetchUser';
+import TableOrdersByUser from './TableOrdersByUser';
 
 interface IViewUserPageProps {}
 const validRolesActions = [ValidRoles.ADMIN, ValidRoles.SUPER_USER] as ValidRol[];
@@ -38,6 +39,8 @@ const ViewUserPage: React.FunctionComponent<IViewUserPageProps> = props => {
 		}
 	}
 
+	if (!Object.keys(user).length) return <Loader loading={true} />;
+
 	const canUseActions =
 		(user.iduser !== authUser.iduser &&
 			!user.roles?.includes(ValidRoles.SUPER_USER) &&
@@ -46,8 +49,6 @@ const ViewUserPage: React.FunctionComponent<IViewUserPageProps> = props => {
 		user.roles?.includes(ValidRoles.USER);
 
 	const isValidRol = authUser.roles?.some(role => validRolesActions.includes(role));
-
-	if (!Object.keys(user).length) return <Loader loading={true} />;
 
 	return (
 		<React.Fragment>
@@ -103,8 +104,9 @@ const ViewUserPage: React.FunctionComponent<IViewUserPageProps> = props => {
 			/>
 			<RenderIf
 				isTrue={
-					!user?.roles?.includes(ValidRoles.SUPER_USER) &&
-					!user?.roles?.includes(ValidRoles.ADMIN)
+					true
+					/* !user?.roles?.includes(ValidRoles.SUPER_USER) &&
+					!user?.roles?.includes(ValidRoles.ADMIN) */
 				}
 			>
 				<div
@@ -112,7 +114,9 @@ const ViewUserPage: React.FunctionComponent<IViewUserPageProps> = props => {
 						'tile',
 						canUseActions && isValidRol ? 'mt-10' : 'mt-64'
 					)}
-				></div>
+				>
+					<TableOrdersByUser id={params.id} />
+				</div>
 			</RenderIf>
 		</React.Fragment>
 	);

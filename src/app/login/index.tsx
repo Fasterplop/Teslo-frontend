@@ -7,9 +7,8 @@ interface ILoginPageProps {}
 const LoginPage: React.FunctionComponent<ILoginPageProps> = props => {
 	return (
 		<AuthLayout>
-			<div className="mb-8">
-				<h3 className="mb-1">Welcome back!</h3>
-				<p>Please enter your credentials to log in!</p>
+			<div className="mb-4">
+				<h6 className="text-center">Welcome back!</h6>
 			</div>
 			<SignInForm />
 		</AuthLayout>

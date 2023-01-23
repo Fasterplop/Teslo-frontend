@@ -94,25 +94,6 @@ const FormUpdateOrder: React.FunctionComponent<IFormUpdateOrderProps> = props =>
 							</tr>
 
 							<tr>
-								<td>Status:</td>
-
-								<td>
-									<SelectFormik
-										className="my-2"
-										name="status"
-										options={ARRSTATUSORDER.map(
-											status => ({
-												value: status,
-												label: capitalize(
-													status
-												),
-											})
-										)}
-									/>
-								</td>
-							</tr>
-
-							<tr>
 								<td>Payment Method:</td>
 
 								<td>
