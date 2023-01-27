@@ -1,5 +1,11 @@
-import { SIDE_NAV_COLLAPSED_WIDTH, SIDE_NAV_WIDTH } from '@/utils';
+import {
+	IS_THEMED,
+	SIDE_NAV_COLLAPSED_WIDTH,
+	SIDE_NAV_WIDTH,
+	THEMED_SIDEBAR_CLASSNAMES,
+} from '@/utils';
 import useResponsive from '@/utils/hooks/useResponsive';
+import classNames from 'classnames';
 import * as React from 'react';
 import MenuItems from '../data/data-menu';
 import { useDashboardStore } from '../store/dashboardStore';
@@ -22,15 +28,22 @@ const sideNavStyle = {
 const VerticalMenuContent: React.FC<IVerticalMenuContentProps> = props => {
 	const { desktop } = useResponsive();
 	const isCollapsed = useDashboardStore(state => state.isCollapsed);
-	const singleMenuItems = MenuItems.filter(item => item.path);
-	const collapsedMenuItems = MenuItems.filter(item => item.subNav);
 
 	return (
 		<div
-			className="px-4 pb-4 mt-8 flex flex-col md:fixed md:mt-24"
+			className="px-4 pb-4 mt-8 flex flex-col md:fixed md:pt-24"
 			style={desktop ? (isCollapsed ? sideNavCollapseStyle : sideNavStyle) : {}}
 		>
-			<span className="text-gray-500 font-bold select-none mb-2 ml-2">App</span>
+			<span
+				className={classNames(
+					'font-bold select-none mb-2 ml-2',
+					IS_THEMED
+						? THEMED_SIDEBAR_CLASSNAMES.textSubtitleSidebar
+						: 'text-gray-500'
+				)}
+			>
+				App
+			</span>
 			{MenuItems.map(menuItem =>
 				!menuItem.subNav ? (
 					<VerticalMenuSingleItem

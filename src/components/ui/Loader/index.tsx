@@ -1,3 +1,4 @@
+import { IS_THEMED, THEMED_SIDEBAR_CLASSNAMES } from '@/utils';
 import classNames from 'classnames';
 import * as React from 'react';
 import ReactDOM from 'react-dom';
@@ -14,7 +15,13 @@ const Loader: React.FunctionComponent<ILoaderProps> = props => {
 	return (
 		<div className={classNames('fixed h-screen w-full bg-white z-50')}>
 			<div className="flex items-center justify-center w-full h-full">
-				<Spinner size={40} className={'text-blue-600'} />
+				<Spinner
+					size={40}
+					className={classNames(
+						!IS_THEMED && 'text-blue-600',
+						IS_THEMED && THEMED_SIDEBAR_CLASSNAMES.loaderColor
+					)}
+				/>
 			</div>
 		</div>
 	);

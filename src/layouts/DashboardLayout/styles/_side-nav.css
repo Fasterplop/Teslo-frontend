@@ -27,3 +27,15 @@
 .ReactCollapse--collapse {
 	transition: height 500ms;
 }
+
+.side-nav-item {
+	@apply px-3 py-2.5 flex items-center justify-between text-sm hover:bg-gray-200 transition rounded-xl cursor-pointer;
+}
+
+.side-nav-item-collapsed {
+	@apply px-3 py-2.5 flex items-center text-sm hover:bg-gray-200 transition cursor-pointer;
+}
+
+.side-nav-item-collapsed-container {
+	@apply ml-3 bg-gray-100 mt-1 rounded-lg overflow-hidden;
+}

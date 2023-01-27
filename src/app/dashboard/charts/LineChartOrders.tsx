@@ -24,8 +24,8 @@ interface ILineChartOrdersProps {
 
 const LineChartOrders: React.FunctionComponent<ILineChartOrdersProps> = props => {
 	const { orders, setOrders } = props;
-	const [isLoading, setIsLoading] = React.useState(false);
 	const [date, setDate] = React.useState(new Date());
+	const [isLoading, setIsLoading] = React.useState(false);
 
 	async function onChangeDate(value: Date) {
 		try {

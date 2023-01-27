@@ -15,6 +15,7 @@ const useResponsive = () => {
 	});
 
 	const handleResize = React.useCallback(() => {
+		console.log({ width: window.innerWidth, height: window.innerHeight });
 		setWindowSize({
 			width: window.innerWidth,
 			height: window.innerHeight,

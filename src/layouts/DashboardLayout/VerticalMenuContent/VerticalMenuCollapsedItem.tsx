@@ -8,6 +8,8 @@ import { useDashboardStore } from '../store/dashboardStore';
 import { Link } from 'react-router-dom';
 import Dropdown from '@/components/ui/Dropdown';
 import DropdownItem from '@/components/ui/Dropdown/DropdownItem';
+import { IS_THEMED, THEMED_SIDEBAR_CLASSNAMES } from '@/utils';
+import useResponsive from '@/utils/hooks/useResponsive';
 
 interface IDefaultItemProps {
 	item: IMenuItem;
@@ -18,15 +20,20 @@ const DefaultItem: React.FunctionComponent<IDefaultItemProps> = props => {
 	const isCollapsed = useDashboardStore(state => state.isCollapsed);
 	const setExpanded = useDashboardStore(state => state.setExpanded);
 	const expanded = useDashboardStore(state => state.expanded);
+	const { desktop } = useResponsive();
 	const isExpanded = expanded === item.title;
-
 	const toggleExpand = () => setExpanded(isExpanded ? null : item.title);
+
+	console.log(desktop)
 
 	return (
 		<React.Fragment>
 			<div
 				className={classNames(
-					'px-3 py-2.5 flex items-center justify-between text-sm hover:bg-gray-200 transition rounded-xl cursor-pointer'
+					'side-nav-item',
+					IS_THEMED &&
+						desktop &&
+						THEMED_SIDEBAR_CLASSNAMES.sidebarItemHover
 				)}
 				onClick={toggleExpand}
 			>
@@ -44,7 +51,10 @@ const DefaultItem: React.FunctionComponent<IDefaultItemProps> = props => {
 			</div>
 			<div
 				className={classNames(
-					'ml-3 bg-gray-100 mt-1 rounded-lg',
+					'side-nav-item-collapsed-container',
+					IS_THEMED &&
+						desktop &&
+						THEMED_SIDEBAR_CLASSNAMES.sidebarDropdownCollapsedContainer,
 					!isCollapsed && 'hidden'
 				)}
 			>
@@ -53,7 +63,12 @@ const DefaultItem: React.FunctionComponent<IDefaultItemProps> = props => {
 						{item.subNav.map(nav => (
 							<Link
 								to={nav.path}
-								className="px-3 py-2.5 flex items-center text-sm hover:bg-gray-200 transition cursor-pointer rounded-xl"
+								className={classNames(
+									'side-nav-item-collapsed',
+									IS_THEMED &&
+										desktop &&
+										THEMED_SIDEBAR_CLASSNAMES.sidebarItemDropdown
+								)}
 								key={nav.path}
 							>
 								<FaCircleNotch className="mr-1.5 text-xs" />{' '}

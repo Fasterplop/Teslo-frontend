@@ -11,6 +11,7 @@ import { useDashboardStore } from './store/dashboardStore';
 import { useAuthStore } from '@/store';
 import { getMaximiumRol } from '@/utils/getMaximiumRol';
 import { Link } from 'react-router-dom';
+import { IS_THEMED, THEMED_SIDEBAR_CLASSNAMES } from '@/utils';
 
 interface IHeaderDashboardProps {}
 
@@ -19,7 +20,12 @@ const HeaderDashboard: React.FC<IHeaderDashboardProps> = props => {
 	const { isCollapsed, toggleCollapse } = useDashboardStore();
 	const { logOut, user } = useAuthStore();
 	return (
-		<header className={classNames('shadow header print:hidden')}>
+		<header
+			className={classNames(
+				'shadow header print:hidden',
+				IS_THEMED && THEMED_SIDEBAR_CLASSNAMES.headerTop
+			)}
+		>
 			<div className={classNames('header-wrapper h-16')}>
 				<div className="header-action header-action-start">
 					<NavToggle onClick={toggleCollapse} toggled={isCollapsed} />
@@ -28,7 +34,13 @@ const HeaderDashboard: React.FC<IHeaderDashboardProps> = props => {
 				<Dropdown
 					showOnHover
 					displayButton={
-						<div className="header-action header-action-end">
+						<div
+							className={classNames(
+								'header-action header-action-end',
+								IS_THEMED &&
+									THEMED_SIDEBAR_CLASSNAMES.textColor
+							)}
+						>
 							<div className="avatar avatar-squared avatar-bordered border-2 avatar-group place-content-center">
 								<HiOutlineUser className=" text-xl h-auto " />
 							</div>

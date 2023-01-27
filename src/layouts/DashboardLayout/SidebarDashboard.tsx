@@ -5,10 +5,12 @@ import RenderIf from '@/components/ui/RenderIf';
 import './styles/_side-nav.css';
 import Logo from '../Logo';
 import {
+	IS_THEMED,
 	LOGO_X_GUTTER,
 	SIDE_NAV_COLLAPSED_WIDTH,
 	SIDE_NAV_CONTENT_GUTTER,
 	SIDE_NAV_WIDTH,
+	THEMED_SIDEBAR_CLASSNAMES,
 	validPaths,
 } from '@/utils';
 import { useDashboardStore } from './store/dashboardStore';
@@ -59,11 +61,18 @@ const SidebarDashboard: React.FC<ISidebarDashboardProps> = props => {
 					style={isCollapsed ? sideNavCollapseStyle : sideNavStyle}
 					className={classNames(
 						'side-nav side-nav-light print:hidden',
+						IS_THEMED && THEMED_SIDEBAR_CLASSNAMES.textColor,
+						IS_THEMED &&
+							THEMED_SIDEBAR_CLASSNAMES.sidebarContainer,
 						!isCollapsed && 'side-nav-expand'
 					)}
 				>
 					<div
-						className="side-nav-header fixed py-[0.95rem]"
+						className={classNames(
+							'side-nav-header fixed py-[0.95rem]',
+							IS_THEMED &&
+								THEMED_SIDEBAR_CLASSNAMES.topLogoContainer
+						)}
 						style={
 							isCollapsed
 								? sideNavCollapseStyle
@@ -77,6 +86,7 @@ const SidebarDashboard: React.FC<ISidebarDashboardProps> = props => {
 										? 'full'
 										: 'streamline'
 								}
+								mode={IS_THEMED ? 'dark' : 'light'}
 								gutter={
 									!isCollapsed
 										? SIDE_NAV_CONTENT_GUTTER
