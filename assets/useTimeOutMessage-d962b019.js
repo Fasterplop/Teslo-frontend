@@ -1,0 +1,1 @@
+import{r as s}from"./iconBase-3b7d111a.js";function a(r=5e3){const[e,t]=s.exports.useState("");return s.exports.useEffect(()=>{if(e){let u=setTimeout(()=>t(""),r);return()=>{clearTimeout(u)}}},[e]),[e,t]}export{a as u};

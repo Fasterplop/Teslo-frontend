@@ -1,0 +1,1 @@
+import{j as e}from"./iconBase-3b7d111a.js";import{u as m}from"./modalStore-d17d7ffe.js";import{R as c}from"./index-39e354ab.js";const a=o=>{const{validRoles:r,children:t}=o,u=m(s=>s.user).roles||[];if(r==="*")return e.exports.jsx(e.exports.Fragment,{children:t});const n=u.some(s=>r==null?void 0:r.includes(s));return e.exports.jsx(c,{isTrue:n,children:t})};export{a as A};

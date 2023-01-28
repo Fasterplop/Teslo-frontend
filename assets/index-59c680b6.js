@@ -1,0 +1,1 @@
+import{b as e}from"./index-39e354ab.js";const c={getAllProducts:()=>e.get("/products/all"),getAllProductsByCategory:t=>e.get(`/products/all/${t}`),getProducts:t=>e.get("/products",{params:t}),getProduct:t=>e.get(`/products/${t}`),createProduct:t=>e.post("/products",t),updateProduct:(t,o)=>e.put(`/products/${t}`,o),deleteProduct:t=>e.delete(`/products/${t}`)};export{c as p};

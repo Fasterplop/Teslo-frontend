@@ -1,0 +1,1 @@
+import{V as e}from"./config-bb52a63e.js";import{c as s}from"./capitalize-1790f93b.js";const m=(l=[])=>{let i;return l.includes(e.SUPER_USER)?i="Super Admin":!i&&l.includes(e.ADMIN)?i=e.ADMIN:!i&&l.includes(e.USER)&&(i=e.USER),s(i)};export{m as g};

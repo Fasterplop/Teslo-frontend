@@ -1,0 +1,1 @@
+import{b as r}from"./index-39e354ab.js";const o={getOrders:()=>r.get("/orders"),getOrderById:e=>r.get(`/orders/${e}`),getOrdersByIdUser:e=>r.get(`/orders/all/${e}`),getOrdersByPaymentMethod:e=>r.get(`/orders/all-payment-method/${e}`),createOrder:e=>r.post("/orders",e),updateOrder:(e,t)=>r.put(`/orders/${e}`,t)};export{o};

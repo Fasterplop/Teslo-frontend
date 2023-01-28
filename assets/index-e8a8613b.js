@@ -1,0 +1,1 @@
+import{j as o}from"./iconBase-3b7d111a.js";import{d as e}from"./index.esm-b0814b9a.js";const n=s=>{const{className:t,onClick:r}=s;return o.exports.jsx("span",{onClick:r,className:t,role:"button",children:o.exports.jsx(e,{})})};n.defaultProps={};export{n as C};
