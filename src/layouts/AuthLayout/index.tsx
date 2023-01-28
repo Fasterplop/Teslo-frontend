@@ -2,7 +2,9 @@ import * as React from 'react';
 import styled from 'styled-components';
 import Logo from '../Logo';
 import BackgroundAuth from './backgroundAuth';
+import classNames from 'classnames';
 import './_card.css';
+import { IS_THEMED, THEMED_SIDEBAR_CLASSNAMES } from '@/utils';
 
 interface IAuthLayoutProps {
 	children?: React.ReactNode;
@@ -11,7 +13,11 @@ interface IAuthLayoutProps {
 const AuthLayout: React.FunctionComponent<IAuthLayoutProps> = props => {
 	return (
 		<div className="min-h-screen">
-			<Material>
+			<Material
+				className={classNames(
+					IS_THEMED && THEMED_SIDEBAR_CLASSNAMES.headerTop
+				)}
+			>
 				<BackgroundAuth />
 			</Material>
 			<div className="flex flex-col flex-auto items-center justify-center min-w-0 min-h-screen">
@@ -35,7 +41,6 @@ const Material = styled.div`
 	width: 100vw;
 	position: fixed;
 	z-index: -1;
-	background: #00d2d3;
 `;
 
 /* SOME COLORS 

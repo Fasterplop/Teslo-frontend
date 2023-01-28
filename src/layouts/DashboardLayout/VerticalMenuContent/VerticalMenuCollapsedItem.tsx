@@ -24,7 +24,7 @@ const DefaultItem: React.FunctionComponent<IDefaultItemProps> = props => {
 	const isExpanded = expanded === item.title;
 	const toggleExpand = () => setExpanded(isExpanded ? null : item.title);
 
-	console.log(desktop)
+	console.log(desktop);
 
 	return (
 		<React.Fragment>
@@ -100,7 +100,7 @@ const CollapsedItem: React.FunctionComponent<ICollapsedItemProps> = props => {
 		>
 			{item.subNav.map(subNavItem => (
 				<DropdownItem
-					className="flex items-center pr-12"
+					className="flex items-center pr-12 hover:text-black"
 					key={subNavItem.title}
 				>
 					<FaCircleNotch className="mr-1 text-xs" />{' '}

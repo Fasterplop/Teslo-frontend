@@ -8,7 +8,7 @@ interface UseTimeOutProps {
 
 function useTimeout(props: UseTimeOutProps) {
 	const { fn, ms = 0, open = true } = props;
-	const timeout = React.useRef<number>();
+	const timeout = React.useRef<NodeJS.Timeout>();
 
 	const clear = React.useCallback(() => {
 		timeout.current && clearTimeout(timeout.current);
